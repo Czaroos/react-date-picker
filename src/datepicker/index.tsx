@@ -8,13 +8,14 @@ import { NextMonthArrow, PreviousMonthArrow } from './components';
 
 import './style.scss';
 
+// clean this up
 const getToday = (months: string[], daysOfWeek: string[]): M.Date => {
   const today = new Date();
   return {
     day: today.getDate(),
     month: today.getMonth(),
-    dayOfWeek: today.getDay() - 1,
     year: today.getFullYear(),
+    dayOfWeek: today.getDay(),
   };
 };
 
@@ -25,6 +26,8 @@ export const DatePicker = ({
   placement = 'horizontal',
   previousMonthArrow,
   nextMonthArrow,
+  showPreviousMonthDays = true,
+  showNextMonthDays = true,
 }: M.Props) => {
   //change it to hook useDate(initDate) later
   const [date, setDate] = useState<M.Date>(
@@ -35,8 +38,8 @@ export const DatePicker = ({
 
   const previousYear = year - 1;
   const nextYear = year + 1;
-  const nextMonth = month + 1;
-  const previousMonth = month - 1;
+  const nextMonth = month !== 11 ? month + 1 : 0;
+  const previousMonth = month !== 0 ? month - 1 : 11;
 
   const setNextYear = () => {
     setDate({ ...date, year: nextYear });
@@ -56,9 +59,21 @@ export const DatePicker = ({
     else setDate({ ...date, month: previousMonth });
   };
 
-  // set dayOfWeek as well
-  const setDay = (day: number) => {
-    setDate({ ...date, day });
+  const getDayOfWeek = (day: number, month: number, year: number) => {
+    return new Date(year, month, day).getDay();
+  };
+
+  const setDay = (
+    day: number,
+    otherMonth: number = month,
+    otherYear: number = year
+  ) => {
+    setDate({
+      day,
+      month: otherMonth,
+      year: otherYear,
+      dayOfWeek: getDayOfWeek(day, month, year),
+    });
   };
 
   const monthToString = (month: number) => {
@@ -90,17 +105,60 @@ export const DatePicker = ({
         {language.DAYS_OF_WEEK.map((dayOfWeek) => (
           <h2 key={dayOfWeek}>{dayOfWeek.slice(0, sliceEndIndex)}</h2>
         ))}
+
+        {Array.from(
+          Array(getDayOfWeek(1, month, year)),
+          (_, index) =>
+            M.DAYS[previousMonth] - getDayOfWeek(1, month, year) + index + 1
+        ).map((previousMonthDay) =>
+          showPreviousMonthDays ? (
+            <div
+              key={previousMonthDay}
+              className={`clickable otherMonthDay`}
+              onClick={() =>
+                setDay(previousMonthDay, previousMonth, previousYear)
+              }
+            >
+              <h3>{previousMonthDay}</h3>
+            </div>
+          ) : (
+            <div />
+          )
+        )}
+
         {Array.from(Array(M.DAYS[month]), (_, index) => index + 1).map(
           (day) => (
-            <div className={`clickable`} onClick={() => setDay(day)}>
-              <h3 key={day}>{day}</h3>
+            <div
+              key={day}
+              className={`clickable ${day === date.day ? 'selected' : ''}`}
+              onClick={() => setDay(day)}
+            >
+              <h3>{day}</h3>
             </div>
           )
         )}
+
         {isLeapFebruary(year) && (
           <div className={`clickable`} onClick={() => setDay(29)}>
-            <h3 key={29}>29</h3>
+            <h3>29</h3>
           </div>
+        )}
+
+        {Array.from(
+          Array(6 - getDayOfWeek(M.DAYS[month], month, year)),
+          (_, index) => index + 1
+        ).map((nextMonthDay) =>
+          showNextMonthDays ? (
+            <div
+              key={nextMonthDay}
+              className={`clickable otherMonthDay`}
+              onClick={() => setDay(nextMonthDay, nextMonth, nextYear)}
+            >
+              <h3>{nextMonthDay}</h3>
+            </div>
+          ) : (
+            <div />
+          )
         )}
       </div>
       <div className={`monthArrows`}>

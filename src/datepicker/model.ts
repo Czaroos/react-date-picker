@@ -5,8 +5,8 @@ export const DAYS: number[] = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 export type Date = {
     day: number,
     month: number,
-    dayOfWeek: number,
     year: number
+    dayOfWeek: number,
 }
 
 export interface MonthArrow {
@@ -25,4 +25,6 @@ export interface Props {
     placement?: Placement;
     previousMonthArrow?: React.FC<MonthArrow>
     nextMonthArrow?: React.FC<MonthArrow>
+    showPreviousMonthDays?: boolean;
+    showNextMonthDays?: boolean;
 }

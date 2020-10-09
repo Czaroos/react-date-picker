@@ -1,8 +1,8 @@
 @import '../global.scss';
 
 .calendarContainer {
-  height: 600px;
-  width: 730px;
+  height: 640px;
+  width: 800px;
   padding: 64px;
   background: $primary;
   border-radius: 4px;
@@ -40,8 +40,18 @@
   cursor: pointer;
   border-radius: 50%;
 
+  &.otherMonthDay {
+    color: $label;
+    opacity: 0.5;
+  }
+
   &:hover {
     background: $secondary;
+    color: $white;
+  }
+
+  &.selected {
+    background: $primaryDark;
     color: $white;
   }
 }
