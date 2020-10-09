@@ -1,0 +1,21 @@
+@import '../global.scss';
+
+.calendarContainer {
+  height: 600px;
+  width: 730px;
+  padding: 28px 48px;
+  background: $primary;
+  border-radius: 4px;
+}
+
+.header {
+  width: 100%;
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+  color: $secondary;
+
+  > h2 {
+    color: $label;
+  }
+}

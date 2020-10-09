@@ -10,14 +10,17 @@ module.exports = {
         include: [path.resolve(__dirname, 'src')],
       },
       {
-        test: /\.s[ac]ss$/i,
+        test: /\.scss$/,
         use: [
-          // Creates `style` nodes from JS strings
           'style-loader',
-          // Translates CSS into CommonJS
           'css-loader',
-          // Compiles Sass to CSS
-          'sass-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              data: '@import "src/global.scss";',
+              includePaths: [path.resolve(__dirname, 'src')],
+            },
+          },
         ],
       },
     ],
