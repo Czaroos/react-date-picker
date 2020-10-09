@@ -3,9 +3,11 @@
 .calendarContainer {
   height: 600px;
   width: 730px;
-  padding: 28px 48px;
+  padding: 64px;
   background: $primary;
   border-radius: 4px;
+  user-select: none;
+  position: relative;
 }
 
 .header {
@@ -14,8 +16,41 @@
   justify-content: space-between;
   align-items: center;
   color: $secondary;
+  margin-bottom: 80px;
 
   > h2 {
     color: $label;
   }
+}
+
+.days {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  justify-items: center;
+  align-items: center;
+  gap: 24px 42px;
+}
+
+.clickable {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  border-radius: 50%;
+
+  &:hover {
+    background: $secondary;
+    color: $white;
+  }
+}
+
+.monthArrows {
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  display: flex;
+  justify-content: space-between;
 }
