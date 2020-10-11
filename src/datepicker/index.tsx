@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 
 import * as M from './model';
 
+import * as U from './utils';
+
 import { EN } from './languages';
 
 import {
@@ -12,28 +14,6 @@ import {
 } from './components';
 
 import './style.scss';
-
-const getToday = (): M.Date => {
-  const today = new Date();
-
-  return {
-    day: today.getDate(),
-    month: today.getMonth(),
-    year: today.getFullYear(),
-    dayOfWeek: today.getDay(),
-  };
-};
-
-const parseInitDate = (initDate: M.InitDate): M.Date => {
-  const { day, month, year } = initDate;
-
-  return {
-    day,
-    month,
-    year,
-    dayOfWeek: new Date(year, month, day).getDay(),
-  };
-};
 
 // in the future add day & month bounds as well
 // add vertical option
@@ -51,8 +31,7 @@ export const DatePicker = ({
   previousYearButton,
   nextYearButton,
 }: M.Props) => {
-  //change it to hook useDate(initDate) later
-  const [date, setDate] = useState<M.Date>(getToday());
+  const [date, setDate] = useState<M.Date>(U.getToday());
   const [error, setError] = useState('');
 
   if (initDate) {
@@ -64,12 +43,12 @@ export const DatePicker = ({
       year <= rightYearBound;
 
     isValidDate
-      ? setDate(parseInitDate(initDate))
-      : // set to multilingual message & display error message discreetly (?)
+      ? setDate(U.parseInitDate(initDate))
+      : // set to multilingual message & display error message
         setError(`Invalid date! Date has been set to today.`);
   }
 
-  const { day, month, dayOfWeek, year } = date;
+  const { day, month, year } = date;
 
   const previousYear = year - 1;
   const nextYear = year + 1;
@@ -94,15 +73,11 @@ export const DatePicker = ({
     else setDate({ ...date, month: previousMonth });
   };
 
-  const getDayOfWeek = (day: number, month: number, year: number) => {
-    return new Date(year, month, day).getDay();
-  };
-
   const setDay = (day: number) => {
     setDate({
       ...date,
       day,
-      dayOfWeek: getDayOfWeek(day, month, year),
+      dayOfWeek: U.getDayOfWeek(day, month, year),
     });
   };
 
@@ -114,7 +89,7 @@ export const DatePicker = ({
       day,
       month: newMonth,
       year: newYear,
-      dayOfWeek: getDayOfWeek(day, newMonth, newYear),
+      dayOfWeek: U.getDayOfWeek(day, newMonth, newYear),
     });
   };
 
@@ -126,29 +101,18 @@ export const DatePicker = ({
       day,
       month: newMonth,
       year: newYear,
-      dayOfWeek: getDayOfWeek(day, newMonth, newYear),
+      dayOfWeek: U.getDayOfWeek(day, newMonth, newYear),
     });
   };
 
-  const monthToString = (month: number) => {
-    return language.MONTHS[month];
-  };
-
-  const dayOfWeekToString = (dayOfWeek: number) => {
-    return language.DAYS_OF_WEEK[dayOfWeek];
-  };
-
-  const isLeapFebruary = (year: number) => {
-    return new Date(year, 1, 29).getDate() === 29 && month === 1;
-  };
-
-  const DAYS: number[] = isLeapFebruary(year)
+  const DAYS = U.isLeapYear(year)
     ? [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
     : [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
   const previousMonthDays = Array.from(
-    Array(getDayOfWeek(1, month, year)),
-    (_, index) => DAYS[previousMonth] - getDayOfWeek(1, month, year) + index + 1
+    Array(U.getDayOfWeek(1, month, year)),
+    (_, index) =>
+      DAYS[previousMonth] - U.getDayOfWeek(1, month, year) + index + 1
   );
 
   const currentMonthDays = Array.from(
@@ -157,7 +121,7 @@ export const DatePicker = ({
   );
 
   const nextMonthDays = Array.from(
-    Array(6 - getDayOfWeek(DAYS[month], month, year)),
+    Array(6 - U.getDayOfWeek(DAYS[month], month, year)),
     (_, index) => index + 1
   );
 
@@ -178,7 +142,7 @@ export const DatePicker = ({
         )}
 
         {/*  set formatting depending on prop passed */}
-        <h2>{`${day} ${monthToString(month)}, ${year}`}</h2>
+        <h2>{`${day} ${U.monthToString(language, month)}, ${year}`}</h2>
         {nextYearButton ? (
           nextYearButton
         ) : (
