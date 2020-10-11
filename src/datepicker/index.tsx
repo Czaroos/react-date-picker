@@ -4,13 +4,18 @@ import * as M from './model';
 
 import { EN } from './languages';
 
-import { NextMonthArrow, PreviousMonthArrow } from './components';
+import {
+  NextMonthArrow,
+  PreviousMonthArrow,
+  NextMonthArrowIcon,
+  PreviousMonthArrowIcon,
+} from './components';
 
 import './style.scss';
 
-// clean this up
-const getToday = (months: string[], daysOfWeek: string[]): M.Date => {
+const getToday = (): M.Date => {
   const today = new Date();
+
   return {
     day: today.getDate(),
     month: today.getMonth(),
@@ -19,20 +24,50 @@ const getToday = (months: string[], daysOfWeek: string[]): M.Date => {
   };
 };
 
+const parseInitDate = (initDate: M.InitDate): M.Date => {
+  const { day, month, year } = initDate;
+
+  return {
+    day,
+    month,
+    year,
+    dayOfWeek: new Date(year, month, day).getDay(),
+  };
+};
+
+// in the future add day & month bounds as well
+// add vertical option
 export const DatePicker = ({
   language = EN,
   initDate,
   sliceEndIndex = 3,
-  placement = 'horizontal',
+  vertical = false,
   previousMonthArrow,
   nextMonthArrow,
   showPreviousMonthDays = true,
   showNextMonthDays = true,
+  leftYearBound = 1900,
+  rightYearBound = 2100,
+  previousYearButton,
+  nextYearButton,
 }: M.Props) => {
   //change it to hook useDate(initDate) later
-  const [date, setDate] = useState<M.Date>(
-    initDate ? initDate : getToday(language.MONTHS, language.DAYS_OF_WEEK)
-  );
+  const [date, setDate] = useState<M.Date>(getToday());
+  const [error, setError] = useState('');
+
+  if (initDate) {
+    const { day, month, year } = initDate;
+
+    const isValidDate =
+      new Date(year, month, day).getDate() === day &&
+      year >= leftYearBound &&
+      year <= rightYearBound;
+
+    isValidDate
+      ? setDate(parseInitDate(initDate))
+      : // set to multilingual message & display error message discreetly (?)
+        setError(`Invalid date! Date has been set to today.`);
+  }
 
   const { day, month, dayOfWeek, year } = date;
 
@@ -91,17 +126,35 @@ export const DatePicker = ({
   return (
     <div className={`calendarContainer`}>
       <div className={`header`}>
-        {/*  later change to previousYearButton prop */}
-        <div className={`clickable`} onClick={setPreviousYear}>
-          <h4>{previousYear}</h4>
-        </div>
+        {previousYearButton ? (
+          previousYearButton
+        ) : (
+          <div
+            className={`clickable ${
+              previousYear < leftYearBound ? 'disabled' : ''
+            }`}
+            onClick={setPreviousYear}
+          >
+            <h4>{previousYear}</h4>
+          </div>
+        )}
+
+        {/*  set formatting depending on prop passed */}
         <h2>{`${day} ${monthToString(month)}, ${year}`}</h2>
-        {/*  later change to nextYearButton prop */}
-        <div className={`clickable`} onClick={setNextYear}>
-          <h4>{nextYear}</h4>
-        </div>
+        {nextYearButton ? (
+          nextYearButton
+        ) : (
+          <div
+            className={`clickable ${
+              nextYear > rightYearBound ? 'disabled' : ''
+            }`}
+            onClick={setNextYear}
+          >
+            <h4>{nextYear}</h4>
+          </div>
+        )}
       </div>
-      <div className={`days`}>
+      <div className={`days ${vertical ? 'vertical' : ''}`}>
         {language.DAYS_OF_WEEK.map((dayOfWeek) => (
           <h2 key={dayOfWeek}>{dayOfWeek.slice(0, sliceEndIndex)}</h2>
         ))}
@@ -116,7 +169,11 @@ export const DatePicker = ({
               key={previousMonthDay}
               className={`clickable otherMonthDay`}
               onClick={() =>
-                setDay(previousMonthDay, previousMonth, previousYear)
+                setDay(
+                  previousMonthDay,
+                  previousMonth,
+                  previousMonth === 11 ? previousYear : year
+                )
               }
             >
               <h3>{previousMonthDay}</h3>
@@ -152,7 +209,13 @@ export const DatePicker = ({
             <div
               key={nextMonthDay}
               className={`clickable otherMonthDay`}
-              onClick={() => setDay(nextMonthDay, nextMonth, nextYear)}
+              onClick={() =>
+                setDay(
+                  nextMonthDay,
+                  nextMonth,
+                  nextMonth === 0 ? nextYear : year
+                )
+              }
             >
               <h3>{nextMonthDay}</h3>
             </div>
@@ -165,12 +228,16 @@ export const DatePicker = ({
         {previousMonthArrow ? (
           previousMonthArrow
         ) : (
-          <PreviousMonthArrow onClick={setPreviousMonth} />
+          <PreviousMonthArrow onClick={setPreviousMonth}>
+            <PreviousMonthArrowIcon />
+          </PreviousMonthArrow>
         )}
         {nextMonthArrow ? (
           nextMonthArrow
         ) : (
-          <NextMonthArrow onClick={setNextMonth} />
+          <NextMonthArrow onClick={setNextMonth}>
+            <NextMonthArrowIcon />
+          </NextMonthArrow>
         )}
       </div>
     </div>

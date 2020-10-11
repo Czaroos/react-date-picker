@@ -1,5 +1,3 @@
-import * as L from './languages';
-
 export const DAYS: number[] = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
 export type Date = {
@@ -9,22 +7,39 @@ export type Date = {
     dayOfWeek: number,
 }
 
-export interface MonthArrow {
+export interface Button {
     onClick(): void;
-    classNames?: string;
+    className?: string;
 }
 
-export type Language = typeof L.EN | typeof L.PL;
+export type Language = {
+    MONTHS: string[],
+    DAYS_OF_WEEK: string[]
+}
+
+export type Days =  1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31
+export type Months = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11
+
+export type InitDate = {
+    day: Days
+    month: Months
+    year: number
+}
+
 export type SliceEndIndex = 1 | 2 | 3
-export type Placement = 'horizontal' | 'vertical'
+
 
 export interface Props {
     language?: Language;
-    initDate?: Date;
+    initDate?: InitDate;
     sliceEndIndex?: SliceEndIndex;
-    placement?: Placement;
-    previousMonthArrow?: React.FC<MonthArrow>
-    nextMonthArrow?: React.FC<MonthArrow>
+    vertical?: boolean;
+    previousMonthArrow?: React.FC<Button>
+    nextMonthArrow?: React.FC<Button>
     showPreviousMonthDays?: boolean;
     showNextMonthDays?: boolean;
+    leftYearBound?: number;
+    rightYearBound?: number;
+    previousYearButton?: React.FC<Button>
+    nextYearButton?: React.FC<Button>;
 }

@@ -1,14 +1,13 @@
 import React from 'react';
-import { MonthArrow } from '../../model';
-import { NextMonthArrowIcon } from '../icons';
+import { Button } from '../../model';
 import './style.scss';
 
-export const NextMonthArrow: React.FC<MonthArrow> = (props) => {
-  const { onClick, classNames } = props;
+export const NextMonthArrow: React.FC<Button> = (props) => {
+  const { onClick, className, children } = props;
 
   return (
-    <div className={`nextMonthArrow ${classNames}`} onClick={onClick}>
-      <NextMonthArrowIcon />
+    <div className={`nextMonthArrow ${className}`} onClick={onClick}>
+      {children}
     </div>
   );
 };
