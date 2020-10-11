@@ -1,5 +1,3 @@
-export const DAYS: number[] = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-
 export type Date = {
     day: number,
     month: number,
