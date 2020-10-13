@@ -6,7 +6,7 @@ import * as U from './utils';
 
 import { EN } from './languages';
 
-import { NextMonthArrow, PreviousMonthArrow } from './components';
+import { NextMonthArrow, PreviousMonthArrow, YearButton } from './components';
 
 import './style.scss';
 
@@ -34,8 +34,8 @@ export const Calendar = (props: M.CalendarProps) => {
     nextMonthArrow = <NextMonthArrow />,
     showPreviousMonthDays = true,
     showNextMonthDays = true,
-    previousYearButton,
-    nextYearButton,
+    previousYearButton = <YearButton />,
+    nextYearButton = <YearButton />,
     leftYearBound,
     rightYearBound,
     error,
@@ -46,31 +46,16 @@ export const Calendar = (props: M.CalendarProps) => {
   return (
     <div className={`calendarContainer`}>
       <div className={`header`}>
-        {previousYearButton ? (
-          cloneElement(previousYearButton, { onClick: setPreviousYear })
-        ) : (
-          <div
-            className={`clickable ${
-              previousYear < leftYearBound ? 'hidden' : ''
-            }`}
-            onClick={setPreviousYear}
-          >
-            <h4>{previousYear}</h4>
-          </div>
-        )}
-
+        {cloneElement(previousYearButton, {
+          onClick: setPreviousYear,
+          dateFragment: previousYear,
+        })}
         {/*  set formatting depending on prop passed */}
         <h2>{`${day} ${U.monthToString(language, month)}, ${year}`}</h2>
-        {nextYearButton ? (
-          cloneElement(nextYearButton, { onClick: setNextYear })
-        ) : (
-          <div
-            className={`clickable ${nextYear > rightYearBound ? 'hidden' : ''}`}
-            onClick={setNextYear}
-          >
-            <h4>{nextYear}</h4>
-          </div>
-        )}
+        {cloneElement(nextYearButton, {
+          onClick: setNextYear,
+          dateFragment: nextYear,
+        })}
       </div>
       <div className={`days`}>
         {language.DAYS_OF_WEEK.map((dayOfWeek) => (
@@ -116,8 +101,14 @@ export const Calendar = (props: M.CalendarProps) => {
         )}
       </div>
       <div className={`monthArrows`}>
-        {cloneElement(previousMonthArrow, { onClick: setPreviousMonth })}
-        {cloneElement(nextMonthArrow, { onClick: setNextMonth })}
+        {cloneElement(previousMonthArrow, {
+          onClick: setPreviousMonth,
+          dateFragment: previousMonth,
+        })}
+        {cloneElement(nextMonthArrow, {
+          onClick: setNextMonth,
+          dateFragment: nextMonth,
+        })}
       </div>
     </div>
   );

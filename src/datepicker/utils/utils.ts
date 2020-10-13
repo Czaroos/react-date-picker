@@ -44,10 +44,12 @@ export const validateDate = (
   rightYearBound: number,
   setError: (err: string) => void
 ) => {
-  const { day, month, year } = date;
+  const { day, month, year, dayOfWeek } = date;
+  const dateObj = new Date(year, month, day);
 
   const isValidDate =
-    new Date(year, month, day).getDate() === day &&
+    dateObj.getDate() === day &&
+    dateObj.getDay() === dayOfWeek &&
     year >= leftYearBound &&
     year <= rightYearBound;
 

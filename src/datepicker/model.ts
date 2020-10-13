@@ -34,9 +34,10 @@ export interface DatePickerLogic {
 }
 
 export interface Button {
-  onClick?(): void;
-  children?: ReactElement;
   className?: string;
+  onClick?(): void;
+  dateFragment?: number;
+  children?: ReactElement;
 }
 
 export type Language = {
