@@ -4,17 +4,28 @@ import * as M from './model';
 
 import * as U from './utils';
 
+const defaultLeftBound = U.useLeftBound({ year: 1900 });
+const defaultRightBound = U.useRightBound({ year: 2100 });
+
 export const DatePicker = ({
   date,
   setDate,
-  leftYearBound = 1900,
-  rightYearBound = 2100,
+  leftBound = defaultLeftBound,
+  rightBound = defaultRightBound,
+  ignoreErrors = false,
   children,
 }: M.DatePickerProps) => {
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string[]>([]);
+
+  //RETURN NULL FROM VALIDATORS IF VALIDATION PASSES
+  useEffect(() => {
+    //ON ERROR SET DEFAULT BOUNDS (?)
+    setError([...error, U.validateBounds(leftBound, rightBound)]);
+  }, [leftBound, rightBound]);
 
   useEffect(() => {
-    U.validateDate(date, leftYearBound, rightYearBound, setError);
+    //ON ERROR SET TODAY && PUT VALIDATION IN CALLBACKS AND PREVENT SETDATE
+    setError([...error, U.validateDate(date, leftBound, rightBound)]);
   }, [date]);
 
   const { month, year } = date;
@@ -95,6 +106,7 @@ export const DatePicker = ({
   );
 
   return (
+    //MAP ERRORS HERE, PROVIDED THAT ignoreErrors IS FALSE
     <div>
       {cloneElement(children, {
         date,
@@ -112,9 +124,8 @@ export const DatePicker = ({
         previousMonthDays,
         currentMonthDays,
         nextMonthDays,
-        leftYearBound,
-        rightYearBound,
-        error,
+        leftBound,
+        rightBound,
       })}
     </div>
   );

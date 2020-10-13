@@ -1,17 +1,18 @@
 import { ReactElement } from 'react';
 
 export type Date = {
-  day: number;
-  month: number;
   year: number;
+  month: number;
+  day: number;
   dayOfWeek: number;
 };
 
 export interface DatePickerProps {
   date: Date;
   setDate(date: Date): void;
-  leftYearBound?: number;
-  rightYearBound?: number;
+  leftBound?: InitDate;
+  rightBound?: InitDate;
+  ignoreErrors?: boolean;
   children: ReactElement<CalendarProps>;
 }
 
@@ -56,9 +57,8 @@ export interface CalendarProps extends Partial<DatePickerLogic> {
   showNextMonthDays?: boolean;
   previousYearButton?: ReactElement<Button>;
   nextYearButton?: ReactElement<Button>;
-  leftYearBound?: number;
-  rightYearBound?: number;
-  error?: string;
+  leftBound?: InitDate;
+  rightBound?: InitDate;
 }
 
 export type Days =
@@ -97,7 +97,7 @@ export type Days =
 export type Months = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
 
 export type InitDate = {
-  day: Days;
-  month: Months;
   year: number;
+  month?: Months;
+  day?: Days;
 };

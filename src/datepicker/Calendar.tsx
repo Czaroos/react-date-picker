@@ -36,9 +36,8 @@ export const Calendar = (props: M.CalendarProps) => {
     showNextMonthDays = true,
     previousYearButton = <YearButton />,
     nextYearButton = <YearButton />,
-    leftYearBound,
-    rightYearBound,
-    error,
+    leftBound,
+    rightBound,
   } = props;
 
   const { day, month, year } = date;
