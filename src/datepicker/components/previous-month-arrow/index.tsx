@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from '../../model';
+import { PreviousMonthArrowIcon } from './icon/PreviousMonthArrowIcon';
 import './style.scss';
 
 export const PreviousMonthArrow = (props: Button) => {
@@ -7,6 +8,7 @@ export const PreviousMonthArrow = (props: Button) => {
 
   return (
     <div className={`previousMonthArrow ${className}`} onClick={onClick}>
+      <PreviousMonthArrowIcon />
       {children}
     </div>
   );

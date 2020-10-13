@@ -6,12 +6,7 @@ import * as U from './utils';
 
 import { EN } from './languages';
 
-import {
-  NextMonthArrow,
-  PreviousMonthArrow,
-  NextMonthArrowIcon,
-  PreviousMonthArrowIcon,
-} from './components';
+import { NextMonthArrow, PreviousMonthArrow } from './components';
 
 import './style.scss';
 
@@ -35,8 +30,8 @@ export const Calendar = (props: M.CalendarProps) => {
     nextMonthDays,
     language = EN,
     sliceEndIndex = 3,
-    previousMonthArrow,
-    nextMonthArrow,
+    previousMonthArrow = <PreviousMonthArrow />,
+    nextMonthArrow = <NextMonthArrow />,
     showPreviousMonthDays = true,
     showNextMonthDays = true,
     previousYearButton,
@@ -121,20 +116,8 @@ export const Calendar = (props: M.CalendarProps) => {
         )}
       </div>
       <div className={`monthArrows`}>
-        {previousMonthArrow ? (
-          cloneElement(previousMonthArrow, { onClick: setPreviousMonth })
-        ) : (
-          <PreviousMonthArrow onClick={setPreviousMonth}>
-            <PreviousMonthArrowIcon />
-          </PreviousMonthArrow>
-        )}
-        {nextMonthArrow ? (
-          cloneElement(nextMonthArrow, { onClick: setNextMonth })
-        ) : (
-          <NextMonthArrow onClick={setNextMonth}>
-            <NextMonthArrowIcon />
-          </NextMonthArrow>
-        )}
+        {cloneElement(previousMonthArrow, { onClick: setPreviousMonth })}
+        {cloneElement(nextMonthArrow, { onClick: setNextMonth })}
       </div>
     </div>
   );
