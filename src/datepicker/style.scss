@@ -8,64 +8,64 @@
   border-radius: 4px;
   user-select: none;
   position: relative;
-}
 
-.header {
-  width: 100%;
-  display: inline-flex;
-  justify-content: space-between;
-  align-items: center;
-  color: $secondary;
-  margin-bottom: 80px;
-  position: relative;
+  .header {
+    width: 100%;
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    color: $secondary;
+    margin-bottom: 80px;
+    position: relative;
 
-  > h2 {
-    color: $label;
-  }
-}
-
-.days {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-  justify-items: center;
-  align-items: center;
-  gap: 24px 42px;
-}
-
-.clickable {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
-  border-radius: 50%;
-
-  &.otherMonthDay {
-    color: $label;
-    opacity: 0.5;
+    > h2 {
+      color: $label;
+    }
   }
 
-  &:hover {
-    background: $secondary;
-    color: $white;
+  .days {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    justify-items: center;
+    align-items: center;
+    gap: 24px 42px;
   }
 
-  &.selected {
-    background: $primaryDark;
-    color: $white;
+  .clickable {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    border-radius: 50%;
+
+    &.otherMonthDay {
+      color: $label;
+      opacity: 0.5;
+    }
+
+    &:hover {
+      background: $secondary;
+      color: $white;
+    }
+
+    &.selected {
+      background: $primaryDark;
+      color: $white;
+    }
   }
-}
 
-.monthArrows {
-  width: 100%;
-  position: absolute;
-  top: 50%;
-  left: 0;
-  display: flex;
-  justify-content: space-between;
-}
+  .monthArrows {
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    display: flex;
+    justify-content: space-between;
+  }
 
-.disabled {
-  display: none;
+  .hidden {
+    display: none;
+  }
 }

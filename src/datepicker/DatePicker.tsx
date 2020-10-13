@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, cloneElement } from 'react';
 
 import * as M from './model';
 
@@ -96,7 +96,7 @@ export const DatePicker = ({
 
   return (
     <div>
-      {React.cloneElement(children, {
+      {cloneElement(children, {
         date,
         previousYear,
         nextYear,

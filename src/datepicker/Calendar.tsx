@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { cloneElement } from 'react';
 
 import * as M from './model';
 
@@ -48,15 +48,15 @@ export const Calendar = (props: M.CalendarProps) => {
 
   const { day, month, year } = date;
 
-  return !error ? (
+  return (
     <div className={`calendarContainer`}>
       <div className={`header`}>
         {previousYearButton ? (
-          previousYearButton
+          cloneElement(previousYearButton, { onClick: setPreviousYear })
         ) : (
           <div
             className={`clickable ${
-              previousYear < leftYearBound ? 'disabled' : ''
+              previousYear < leftYearBound ? 'hidden' : ''
             }`}
             onClick={setPreviousYear}
           >
@@ -67,12 +67,10 @@ export const Calendar = (props: M.CalendarProps) => {
         {/*  set formatting depending on prop passed */}
         <h2>{`${day} ${U.monthToString(language, month)}, ${year}`}</h2>
         {nextYearButton ? (
-          nextYearButton
+          cloneElement(nextYearButton, { onClick: setNextYear })
         ) : (
           <div
-            className={`clickable ${
-              nextYear > rightYearBound ? 'disabled' : ''
-            }`}
+            className={`clickable ${nextYear > rightYearBound ? 'hidden' : ''}`}
             onClick={setNextYear}
           >
             <h4>{nextYear}</h4>
@@ -124,14 +122,14 @@ export const Calendar = (props: M.CalendarProps) => {
       </div>
       <div className={`monthArrows`}>
         {previousMonthArrow ? (
-          previousMonthArrow
+          cloneElement(previousMonthArrow, { onClick: setPreviousMonth })
         ) : (
           <PreviousMonthArrow onClick={setPreviousMonth}>
             <PreviousMonthArrowIcon />
           </PreviousMonthArrow>
         )}
         {nextMonthArrow ? (
-          nextMonthArrow
+          cloneElement(nextMonthArrow, { onClick: setNextMonth })
         ) : (
           <NextMonthArrow onClick={setNextMonth}>
             <NextMonthArrowIcon />
@@ -139,7 +137,5 @@ export const Calendar = (props: M.CalendarProps) => {
         )}
       </div>
     </div>
-  ) : (
-    <div>{/* HANDLE ERROR HERE */}</div>
   );
 };

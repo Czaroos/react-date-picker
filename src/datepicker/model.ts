@@ -1,3 +1,5 @@
+import { ReactElement } from 'react';
+
 export type Date = {
   day: number;
   month: number;
@@ -10,7 +12,7 @@ export interface DatePickerProps {
   setDate(date: Date): void;
   leftYearBound?: number;
   rightYearBound?: number;
-  children: React.ReactElement<CalendarProps>;
+  children: ReactElement<CalendarProps>;
 }
 
 export interface DatePickerLogic {
@@ -32,8 +34,8 @@ export interface DatePickerLogic {
 }
 
 export interface Button {
-  onClick(): void;
-  children?: React.ReactElement;
+  onClick?(): void;
+  children?: ReactElement;
   className?: string;
 }
 
@@ -47,12 +49,12 @@ export type SliceEndIndex = 1 | 2 | 3;
 export interface CalendarProps extends Partial<DatePickerLogic> {
   language?: Language;
   sliceEndIndex?: SliceEndIndex;
-  previousMonthArrow?: React.ReactElement<Button>;
-  nextMonthArrow?: React.ReactElement<Button>;
+  previousMonthArrow?: ReactElement<Button>;
+  nextMonthArrow?: ReactElement<Button>;
   showPreviousMonthDays?: boolean;
   showNextMonthDays?: boolean;
-  previousYearButton?: React.ReactElement<Button>;
-  nextYearButton?: React.ReactElement<Button>;
+  previousYearButton?: ReactElement<Button>;
+  nextYearButton?: ReactElement<Button>;
   leftYearBound?: number;
   rightYearBound?: number;
   error?: string;
