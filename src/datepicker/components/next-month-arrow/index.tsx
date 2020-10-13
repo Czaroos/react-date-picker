@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from '../../model';
 import './style.scss';
 
-export const NextMonthArrow: React.FC<Button> = (props) => {
+export const NextMonthArrow = (props: Button) => {
   const { onClick, className, children } = props;
 
   return (

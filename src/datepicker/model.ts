@@ -5,8 +5,35 @@ export type Date = {
   dayOfWeek: number;
 };
 
+export interface DatePickerProps {
+  date: Date;
+  setDate(date: Date): void;
+  leftYearBound?: number;
+  rightYearBound?: number;
+  children: React.ReactElement<CalendarProps>;
+}
+
+export interface DatePickerLogic {
+  date: Date;
+  previousYear: number;
+  nextYear: number;
+  nextMonth: number;
+  previousMonth: number;
+  setNextYear(): void;
+  setPreviousYear(): void;
+  setNextMonth(): void;
+  setPreviousMonth(): void;
+  setDay(day: number): void;
+  setNextMonthDay(day: number): void;
+  setPreviousMonthDay(day: number): void;
+  previousMonthDays: number[];
+  currentMonthDays: number[];
+  nextMonthDays: number[];
+}
+
 export interface Button {
   onClick(): void;
+  children?: React.ReactElement;
   className?: string;
 }
 
@@ -14,6 +41,22 @@ export type Language = {
   MONTHS: string[];
   DAYS_OF_WEEK: string[];
 };
+
+export type SliceEndIndex = 1 | 2 | 3;
+
+export interface CalendarProps extends Partial<DatePickerLogic> {
+  language?: Language;
+  sliceEndIndex?: SliceEndIndex;
+  previousMonthArrow?: React.ReactElement<Button>;
+  nextMonthArrow?: React.ReactElement<Button>;
+  showPreviousMonthDays?: boolean;
+  showNextMonthDays?: boolean;
+  previousYearButton?: React.ReactElement<Button>;
+  nextYearButton?: React.ReactElement<Button>;
+  leftYearBound?: number;
+  rightYearBound?: number;
+  error?: string;
+}
 
 export type Days =
   | 1
@@ -55,20 +98,3 @@ export type InitDate = {
   month: Months;
   year: number;
 };
-
-export type SliceEndIndex = 1 | 2 | 3;
-
-export interface Props {
-  language?: Language;
-  initDate?: InitDate;
-  sliceEndIndex?: SliceEndIndex;
-  vertical?: boolean;
-  previousMonthArrow?: React.FC<Button>;
-  nextMonthArrow?: React.FC<Button>;
-  showPreviousMonthDays?: boolean;
-  showNextMonthDays?: boolean;
-  leftYearBound?: number;
-  rightYearBound?: number;
-  previousYearButton?: React.FC<Button>;
-  nextYearButton?: React.FC<Button>;
-}
