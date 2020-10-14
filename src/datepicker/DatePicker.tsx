@@ -4,8 +4,10 @@ import * as M from './model';
 
 import * as U from './utils';
 
-const defaultLeftBound = U.useLeftBound({ year: 1900 });
-const defaultRightBound = U.useRightBound({ year: 2100 });
+import * as V from './utils/validators';
+
+const defaultLeftBound = U.useLeftBound({ year: 2019 });
+const defaultRightBound = U.useRightBound({ year: 2021 });
 
 export const DatePicker = ({
   date,
@@ -15,20 +17,24 @@ export const DatePicker = ({
   ignoreErrors = false,
   children,
 }: M.DatePickerProps) => {
-  const [error, setError] = useState<string[]>([]);
+  const [errors, setErrors] = useState<string[]>([]);
 
   //RETURN NULL FROM VALIDATORS IF VALIDATION PASSES
   useEffect(() => {
     //ON ERROR SET DEFAULT BOUNDS (?)
-    setError([...error, U.validateBounds(leftBound, rightBound)]);
+    setErrors([]);
+    const boundsError = V.validateBounds(leftBound, rightBound);
+    boundsError && setErrors([boundsError]);
   }, [leftBound, rightBound]);
 
   useEffect(() => {
     //ON ERROR SET TODAY && PUT VALIDATION IN CALLBACKS AND PREVENT SETDATE
-    setError([...error, U.validateDate(date, leftBound, rightBound)]);
+    setErrors([]);
+    const dateError = V.validateDate(date, leftBound, rightBound);
+    dateError && setErrors([dateError]);
   }, [date]);
 
-  const { month, year } = date;
+  const { day, month, year } = date;
 
   const previousYear = year - 1;
   const nextYear = year + 1;
@@ -36,21 +42,51 @@ export const DatePicker = ({
   const previousMonth = month !== 0 ? month - 1 : 11;
 
   const setNextYear = () => {
-    setDate({ ...date, year: nextYear });
+    setDate({
+      ...date,
+      year: nextYear,
+      dayOfWeek: U.getDayOfWeek(day, month, nextYear),
+    });
   };
 
   const setPreviousYear = () => {
-    setDate({ ...date, year: previousYear });
+    setDate({
+      ...date,
+      year: previousYear,
+      dayOfWeek: U.getDayOfWeek(day, month, previousYear),
+    });
   };
 
   const setNextMonth = () => {
-    if (month === 11) setDate({ ...date, month: 0, year: nextYear });
-    else setDate({ ...date, month: nextMonth });
+    if (month === 11)
+      setDate({
+        ...date,
+        month: 0,
+        year: nextYear,
+        dayOfWeek: U.getDayOfWeek(day, 0, nextYear),
+      });
+    else
+      setDate({
+        ...date,
+        month: nextMonth,
+        dayOfWeek: U.getDayOfWeek(day, nextMonth, year),
+      });
   };
 
   const setPreviousMonth = () => {
-    if (month === 0) setDate({ ...date, month: 11, year: previousYear });
-    else setDate({ ...date, month: previousMonth });
+    if (month === 0)
+      setDate({
+        ...date,
+        month: 11,
+        year: previousYear,
+        dayOfWeek: U.getDayOfWeek(day, 11, previousYear),
+      });
+    else
+      setDate({
+        ...date,
+        month: previousMonth,
+        dayOfWeek: U.getDayOfWeek(day, previousMonth, year),
+      });
   };
 
   const setDay = (day: number) => {
@@ -107,7 +143,8 @@ export const DatePicker = ({
 
   return (
     //MAP ERRORS HERE, PROVIDED THAT ignoreErrors IS FALSE
-    <div>
+    <>
+      {console.log(errors)}
       {cloneElement(children, {
         date,
         previousYear,
@@ -127,6 +164,6 @@ export const DatePicker = ({
         leftBound,
         rightBound,
       })}
-    </div>
+    </>
   );
 };
